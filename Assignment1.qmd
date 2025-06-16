@@ -1,0 +1,9 @@
+---
+title: "Assignment 1"
+---
+
+Question 1. Try Anscombe’s examples (anscombe01.R on Teams)
+
+Here is the output chart's from Anscombe's examples.
+
+![](q1p1.png)

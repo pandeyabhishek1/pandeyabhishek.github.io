@@ -1,0 +1,112 @@
+---
+title: "Assignment 4"
+---
+
+
+::: {.cell}
+
+
+```{.r .cell-code}
+##Assignment4Compiled
+
+
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+
+file_path <- "C:/Users/pande/Downloads/DV_ProjectData.csv"  # or "C:\\Users\\ams190002\\Downloads\\DV_ProjectData.csv"
+data <- read.csv(file_path)
+head(data)
+summary(data)
+
+## Cleaning Data 
+
+state_means <- data %>%
+group_by(State) %>%
+summarise(across(c(VoterTurnoutRate, MedianHouseholdIncome, UnemploymentRate, HSCompletion, SomeCollegeEducation,PoorOrFairHealth, AvgPoorPhysHealthDays, AvgPoorMentalHealthDays, ObesityRate, 
+FoodEnviornmentIndex, FoodInsecurity, LimitedAccesstoHealthyFoods, PhysInactivityRate,Population), mean))
+View(state_means)
+states_of_interest <- c("CA", "AR", "TX", "OK", "NJ")
+state_means_filtered <- state_means %>%
+  filter(State %in% states_of_interest)
+
+par(family="serif")
+
+## Graph 1
+
+bluecolorramp <- colorRampPalette(c("skyblue", "mediumblue"))(length(state_means_filtered$MedianHouseholdIncome))
+colors <- bluecolorramp[rank(state_means_filtered$MedianHouseholdIncome)]
+
+par(family="serif", cex=0.9, mar=c(3, 3.5, 3, 1))
+barplot(state_means_filtered$VoterTurnoutRate, width=state_means_filtered$MedianHouseholdIncome, space=0, 
+        col=colors, ylim=c(0,0.8), names.arg=state_means_filtered$State)
+title(main="Voter Turnout vs Median Household Income", cex.main=1.5)
+mtext("Voter Turnout Rate", , side=2, line=2.2, cex=1.1)
+box(bty="l")
+legend("topright", legend = c("Low Income", "High Income"), fill = c("skyblue", "mediumblue"), 
+       title = "Income Level")
+
+## Graph 2
+
+reduceddata <- data%>%
+  filter(State == "CA"| State=="AR"|State =="TX" | State == "OK"|State =="NJ")
+
+ggplot(data = reduceddata,aes(x=VoterTurnoutRate, color = State))+
+  geom_density()+
+  scale_color_brewer(palette = "Dark2")+
+  theme_minimal()+
+  theme(legend.position = "none",
+        text = element_text(family = "serif"))+
+  facet_wrap(~State)
+
+
+## Graph 3
+
+
+ggplot(state_means_filtered, aes(x = reorder(State, VoterTurnoutRate), y = VoterTurnoutRate, fill= "forestgreen")) + 
+  geom_col(show.legend=FALSE) + 
+  labs(title = "Voter Turnout Rate by State", x = "State", y = "Voter Turnout Rate") + 
+  theme_classic() +
+  theme(text = element_text(family = "serif")) +
+  coord_flip()
+
+##Graph 4
+
+# Cleaning Data to Include DFW Counties
+dfw_counties <- c("Collin County", "Dallas County", "Denton County", "Ellis County", 
+                  "Hunt County", "Kaufman County", "Rockwall County", 
+                  "Johnson County", "Parker County", "Tarrant County", "Wise County")
+
+dfw_data <- subset(data, CountyName %in% dfw_counties)
+
+# Convert the data from wide to long format
+dfw_data_long <- dfw_data %>%
+  pivot_longer(cols = c("HSCompletion", "SomeCollegeEducation"), 
+               names_to = "EducationLevel", 
+               values_to = "Percentage")
+
+# Create the column chart
+ggplot(dfw_data_long, aes(x = CountyName, y = Percentage * 100, fill = EducationLevel)) + 
+  geom_bar(stat = 'identity', position = 'dodge') + 
+  labs(title = 'High School Completion vs Some College Education in DFW Metropolis ',
+       x = 'County Name', y = 'Percentage (%)') + 
+  scale_fill_manual(name = 'Education Level', 
+                    values = c('HSCompletion' = 'steelblue', 'SomeCollegeEducation' = 'forestgreen')) + 
+  theme_minimal() + 
+  theme(text = element_text(family = "serif"),
+        axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))
+
+
+```
+
+::: {.cell-output-display}
+![](Assignment4p1)
+![](Assignment4p2)
+![](Assignment4p3)
+![](Assignment4p4)
+
+
+
+:::
+:::
+

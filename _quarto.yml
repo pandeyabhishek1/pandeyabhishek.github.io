@@ -1,0 +1,23 @@
+project:
+  title: "Website"
+
+website:
+  title: "Abhishek Pandey"
+  navbar:
+    left: 
+      - href: index.qmd
+        text: "Home"
+      - href: Assignment1.qmd
+        text: Curriculum Vitae
+      - href: Assignment2.qmd
+        text: Research Portfolio
+      - href: Assignment3.qmd
+        text: Teachings
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+ 
+editor: visual
+

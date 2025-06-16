@@ -1,0 +1,89 @@
+---
+title: "Assignment 2"
+---
+
+### 1.The output of Murrel01.R are:
+
+![](A2p1.png)
+
+![](A2p2.png) \### 2. The program generating plots similar to murrel01 using happiness dataset is:
+
+::: cell
+``` {.r .cell-code}
+# Load the dataset
+data <- read_excel("C:/Users/pande/OneDrive - The University of Texas at Dallas/PhD/2024_Fall/Data_Visualization/Happiness.xlsx")
+
+# Set layout for two plots side by side
+par(mfrow = c(1, 2)) 
+hist(data$`Life Expectancy (years)`, main = "Life Expectancy Distribution", xlab = "Years")
+hist(data$`GDP per capita ($)`, main = "GDP per Capita Distribution", xlab = "GDP ($)")
+
+# Reset layout to a single plot
+par(mfrow = c(1, 1))
+
+# Plot Life Expectancy vs Wellbeing with a smoothed line
+plot(data$`Life Expectancy (years)`, data$`Ladder of life (Wellbeing) (0-10)`, 
+     main = "Life Expectancy vs Wellbeing", xlab = "Life Expectancy (years)", ylab = "Wellbeing Score")
+lines(lowess(data$`Life Expectancy (years)`, data$`Ladder of life (Wellbeing) (0-10)`), col = "blue") 
+
+# Plot Life Expectancy vs HPI with red points overlay
+plot(data$`Life Expectancy (years)`, data$HPI, main = "Life Expectancy vs HPI", 
+     xlab = "Life Expectancy (years)", ylab = "Happy Planet Index")
+points(data$`Life Expectancy (years)`, data$HPI, col = "red", pch = 16) 
+
+# Plot HPI vs GDP with custom axes
+plot(data$HPI, data$`GDP per capita ($)`, main = "HPI vs GDP", 
+     xlab = "Happy Planet Index", ylab = "GDP per Capita ($)", axes = FALSE)
+axis(1, at = seq(0, 100, by = 10))
+axis(2, las = 1)
+box()
+
+# Histogram of Carbon Footprint with a box around the plot
+hist(data$`Carbon Footprint (tCO2e)`, main = "Carbon Footprint Distribution", xlab = "tCO2e")
+box()
+
+# Scatter plot with text labels
+plot(data$`Life Expectancy (years)`, data$`GDP per capita ($)`, 
+     main = "Life Expectancy vs GDP per Capita", xlab = "Life Expectancy (years)", ylab = "GDP per Capita ($)")
+text(data$`Life Expectancy (years)`, data$`GDP per capita ($)`, labels = data$Country, cex = 0.7, pos = 4, col = "blue")
+
+# Histogram with mtext annotations
+hist(data$`Ladder of life (Wellbeing) (0-10)`, main = "Wellbeing Score Distribution", xlab = "Wellbeing Score")
+mtext("Wellbeing Histogram", side = 3, line = 2)
+mtext("Sample Data on Global Happiness", side = 1, line = 3, col = "red")
+
+# Histogram for GDP per capita
+hist(data$`GDP per capita ($)`, main = "Histogram of GDP per Capita", xlab = "GDP per Capita ($)")
+
+# Boxplot of Life Expectancy by Continent
+boxplot(data$`Life Expectancy (years)` ~ data$Continent, main = "Life Expectancy by Continent", 
+        xlab = "Continent", ylab = "Life Expectancy (years)")
+
+# Scatter plot with legend
+plot(data$`Life Expectancy (years)`, data$`Ladder of life (Wellbeing) (0-10)`, col = "blue", pch = 16, 
+     main = "Life Expectancy vs Wellbeing")
+legend("topright", legend = "Data Points", col = "blue", pch = 16)
+
+# 3D Perspective plot (example with arbitrary z values for illustration)
+persp(x = seq(1, nrow(data)), y = seq(1, nrow(data)), 
+      z = outer(data$`Life Expectancy (years)`, data$HPI, "+"), 
+      main = "3D Perspective of Life Expectancy and HPI", xlab = "Index", ylab = "Index", zlab = "Sum")
+
+# Bar plot with names as labels
+barplot(data$HPI[1:10], names.arg = data$Country[1:10], las = 2, 
+        main = "HPI for Top 10 Countries", xlab = "Country", ylab = "HPI")
+
+# Pie chart of population distribution for the top 10 countries
+pie(data$`Population (thousands)`[1:10], labels = data$Country[1:10], 
+    main = "Population Distribution (Top 10 Countries)")
+
+
+
+```
+
+#::: {.cell-output-display} The output of the program are: ![](A2p3.png)
+
+![](A2p4.png)
+:::
+
+and other
